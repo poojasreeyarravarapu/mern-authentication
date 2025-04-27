@@ -15,7 +15,7 @@ const allowedOrigins = ['https://mern-authentication-frontend-awmx.onrender.com'
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: allowedOrigins, credentials: true}));
+app.use(cors({origin: allowedOrigins, credentials: true, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],}));
 
 //API Endpoints
 app.get('/', (req,res) => {
