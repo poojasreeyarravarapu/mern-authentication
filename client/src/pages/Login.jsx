@@ -6,47 +6,50 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContext);
+  //define state for login and registration
 
-  const [state, setState] = useState('Sign up');
+  const navigate = useNavigate()
+
+  const {backendUrl, setIsLoggedin, getUserData} = useContext(AppContext)
+  
+
+  const [state, setState] = useState('Sign up')
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state for the button
+  //store input field data in these state variables
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setLoading(true);  // Start loading when form is submitted
+  const onSubmitHandler = async(e) => {
+    try{
+      e.preventDefault();
 
-    try {
-      // Set the axios config for credentials for this request
-      const axiosConfig = { withCredentials: true };
-
-      let response;
-
-      if (state === 'Sign up') {
-        response = await axios.post(`${backendUrl}/api/auth/register`, { name, email, password }, axiosConfig);
-      } else {
-        response = await axios.post(`${backendUrl}/api/auth/login`, { email, password }, axiosConfig);
+      //to send the cookies it must be true
+      axios.defaults.withCredentials = true;
+      if( state === 'Sign up'){
+        const {data} = await axios.post(`${backendUrl}/api/auth/register`, {name,email,password});
+        if (data.success){
+          setIsLoggedin(true);
+          getUserData()
+          navigate('/')
+        }else{
+          //alert(data.message) instead of this
+          toast.error(data.message)
       }
-
-      const { data } = response;
-
-      if (data.success) {
-        setIsLoggedin(true);
-        getUserData();
-        navigate('/');  // Redirect to home after successful login/signup
-      } else {
-        toast.error(data.message);  // Display error message from backend
+      }else{
+        const {data} = await axios.post(`${backendUrl}/api/auth/login`, { email,password});
+        if (data.success){
+          setIsLoggedin(true);
+          getUserData()
+          navigate('/')
+        }else{
+          //alert(data.message) instead of this
+          toast.error(data.message)
       }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");  // Handle errors
-    } finally {
-      setLoading(false);  // Stop loading after the request is done
-    }
-  };
-
+      }
+    }catch(error){
+      toast.error(error.response?.data?.message || "Something went wrong");
+  }
+  }
   return (
     <div className='flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-purple-400'>
       <img onClick={() => navigate('/')} src={assets.logo} alt="" className='absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer' />
@@ -73,24 +76,20 @@ const Login = () => {
 
           <p onClick={() => navigate('/reset-password')} className='mb-4 text-indigo-500 cursor-pointer'>Forgot password?</p>
 
-          <button className='w-full py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium cursor-pointer' disabled={loading}>
-            {loading ? 'Loading...' : state}
-          </button>
+          <button className='w-full py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium cursor-pointer'>{state}</button>
         </form>
 
-        {state === 'Sign up' ? (
-          <p className='text-gray-400 text-center text-xs mt-4'>Already have an account?{' '}
-            <span onClick={() => setState('Login')} className='text-blue-400 cursor-pointer underline'>Login Here</span>
-          </p>
-        ) : (
+        {state === 'Sign up' ? (<p className='text-gray-400 text-center text-xs mt-4'>Already have an account?{' '}
+          <span onClick={() => setState('Login')} className='text-blue-400 cursor-pointer underline'>Login Here</span>
+        </p>) : (
           <p className='text-gray-400 text-center text-xs mt-4'>Don't have an account?{' '}
             <span onClick={() => setState('Sign up')} className='text-blue-400 cursor-pointer underline'>Sign up</span>
-          </p>
-        )}
+          </p>)}
 
       </div>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default Login
+ 
