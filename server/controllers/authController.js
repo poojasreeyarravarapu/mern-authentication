@@ -32,7 +32,7 @@ export const register = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', //development that is http it is false
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // in devolepment environment it is strict
+            sameSite: 'none', // in devolepment environment it is strict
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })//name and value are provided
 
@@ -79,7 +79,7 @@ export const login = async (req,res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', //development that is http it is false
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // in devolepment environment it is strict
+            sameSite: process.env.NODE_ENV === 'none', // in devolepment environment it is strict
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
 
@@ -95,7 +95,7 @@ export const logout = async(req, res) => {
         res.clearCookie('token', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', //development that is http it is false
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // in devolepment environment it is strict
+            sameSite: process.env.NODE_ENV === 'none', // in devolepment environment it is strict
         })
 
         return res.json({success: true, message: 'Logged Out'})
