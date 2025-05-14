@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
-const allowedOrigins = ['https://mern-authentication-frontend-awmx.onrender.com']
+const allowedOrigins = ['https://mern-authentication-frontend-awmx.onrender.com','mern-authentication-5gv8ogh8k-poojasreeyarravarapus-projects.vercel.app']
 
 app.use(express.json());
 app.use(cookieParser());
