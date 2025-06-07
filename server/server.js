@@ -11,11 +11,11 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
-const allowedOrigins = ['https://mern-authentication-frontend-awmx.onrender.com','mern-authentication-5gv8ogh8k-poojasreeyarravarapus-projects.vercel.app']
+const allowedOrigins = ['https://mern-authentication-frontend-awmx.onrender.com']
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: allowedOrigins, credentials: true, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],}));
+app.use(cors({origin: allowedOrigins, credentials: true}));
 
 //API Endpoints
 app.get('/', (req,res) => {
